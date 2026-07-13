@@ -68,7 +68,7 @@ function crossPaths(seed) {
 function HandCircle({ seed, delay }) {
   const { d, len } = circlePath(seed);
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "visible" }}>
+    <svg viewBox="0 0 40 40" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}>
       <path className="ink-draw" d={d} fill="none" stroke={SHU} strokeWidth="2.2" strokeLinecap="round" style={{ "--len": len, "--delay": `${delay}s` }} />
     </svg>
   );
@@ -76,7 +76,7 @@ function HandCircle({ seed, delay }) {
 function HandCross({ seed, delay }) {
   const [a, b] = crossPaths(seed);
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "visible" }}>
+    <svg viewBox="0 0 40 40" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}>
       <path className="ink-draw" d={a} fill="none" stroke={SHU} strokeWidth="2.4" strokeLinecap="round" style={{ "--len": 40, "--delay": `${delay}s` }} />
       <path className="ink-draw" d={b} fill="none" stroke={SHU} strokeWidth="2.4" strokeLinecap="round" style={{ "--len": 40, "--delay": `${delay + 0.14}s` }} />
     </svg>
@@ -333,7 +333,7 @@ export default function Game() {
   }
 
   return (
-    <div style={{ background: PAPER, color: INK, fontFamily: GOTHIC, minHeight: "100dvh", display: "flex", flexDirection: "column", alignItems: "center", padding: "32px 16px" }}>
+    <div style={{ background: PAPER, color: INK, fontFamily: GOTHIC, minHeight: "100dvh", display: "flex", flexDirection: "column", alignItems: "center", padding: "24px 12px" }}>
       <div style={{ width: "100%", maxWidth: 1000 }}>
         {screen === "title" && <Title diff={diff} setDiff={setDiff} mode={mode} setMode={setMode} notice={notice} sound={sound} setSound={(v) => { setSound(v); setSoundEnabled(v); }} gameMode={gameMode} setGameMode={setGameMode} feedback={feedback} setFeedback={setFeedback} taSecs={taSecs} setTaSecs={setTaSecs} tcMode={tcMode} setTcMode={setTcMode} onStart={start} />}
         {screen === "loading" && <Loading />}
@@ -364,7 +364,7 @@ function Loading() {
 
 function Masu({ children }) {
   return (
-    <div style={{ width: 40, height: 40, border: `1px solid ${GRID}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: MINCHO, fontSize: 24, lineHeight: 1, color: INK, background: PAPER }}>
+    <div style={{ width: "var(--masu)", height: "var(--masu)", border: `1px solid ${GRID}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: MINCHO, fontSize: "var(--masu-font)", lineHeight: 1, color: INK, background: PAPER }}>
       {children}
     </div>
   );
@@ -379,10 +379,10 @@ function GapButton({ mark, onTap }) {
       onClick={onTap}
       aria-label="句読点を入れる"
       style={{
-        width: filled ? 40 : 20, height: 40,
+        width: filled ? "var(--masu)" : "var(--gap)", height: "var(--masu)",
         border: filled ? `1px solid ${GRID}` : `1px dashed ${GRID}`,
         background: filled ? PAPER_DK : "rgba(58,125,92,0.06)",
-        color: SHU, fontFamily: MINCHO, fontSize: 24, lineHeight: 1,
+        color: SHU, fontFamily: MINCHO, fontSize: "var(--masu-font)", lineHeight: 1,
         cursor: "pointer", transition: "width .12s ease, transform .08s ease", padding: 0,
       }}
     >
@@ -394,7 +394,7 @@ function GapButton({ mark, onTap }) {
 // 結果表示のスキマ（○＝正解／✗＝誤り を手描きで添削）
 function GapResult({ userMark, correctMark, verdict, seed, animDelay }) {
   const has = verdict === "ok" || verdict === "missed" || verdict === "wrongmark" || verdict === "extra";
-  if (!has) return <span style={{ display: "inline-block", width: 12, height: 40 }} />;
+  if (!has) return <span style={{ display: "inline-block", width: 10, height: "var(--masu)" }} />;
   const delay = (animDelay || 0) / 1000;
   let bg = OK_BG, main = "", mainColor = INK, top = null, overlay = null;
   if (verdict === "ok") {
@@ -416,7 +416,7 @@ function GapResult({ userMark, correctMark, verdict, seed, animDelay }) {
       {top && (
         <span style={{ position: "absolute", top: -20, left: "50%", transform: "translateX(-50%)", fontSize: 13, fontFamily: GOTHIC, whiteSpace: "nowrap", zIndex: 2, background: PAPER_DK, padding: "0 4px", borderRadius: 3, lineHeight: 1.2 }}>{top}</span>
       )}
-      <span style={{ width: 40, height: 40, border: `1px solid ${GRID}`, background: bg, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: MINCHO, fontSize: 24, lineHeight: 1, color: mainColor }}>{main}</span>
+      <span style={{ width: "var(--masu)", height: "var(--masu)", border: `1px solid ${GRID}`, background: bg, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: MINCHO, fontSize: "var(--masu-font)", lineHeight: 1, color: mainColor }}>{main}</span>
       {overlay}
     </span>
   );
@@ -471,7 +471,7 @@ function Title({ diff, setDiff, mode, setMode, notice, sound, setSound, gameMode
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 22, padding: "24px 0" }}>
       <div>
         <div style={{ fontFamily: MINCHO, fontSize: 15, letterSpacing: 6, color: GRID }}>げんこうようし</div>
-        <h1 style={{ fontFamily: MINCHO, fontSize: 44, fontWeight: 700, letterSpacing: 4, margin: "4px 0" }}>句読点、</h1>
+        <h1 style={{ fontFamily: MINCHO, fontSize: "clamp(34px, 9vw, 44px)", fontWeight: 700, letterSpacing: 4, margin: "4px 0" }}>句読点、</h1>
         <p style={{ color: "#6b6b6b", fontSize: 14 }}>抜けた「、」や「。」を、正しい場所に打ち直そう。</p>
       </div>
 
@@ -574,7 +574,7 @@ function Play({ base, marks, onTap, seconds, diff, mode, cycle, session, gameMod
         <span>{session.played} 問{ta ? "・○" + (session.marks || 0) : "クリア"}</span>
       </div>
 
-      <div style={{ background: PAPER_DK, border: `1px solid ${GRID}`, padding: 16, position: "relative" }}>
+      <div style={{ background: PAPER_DK, border: `1px solid ${GRID}`, padding: "14px 8px", position: "relative" }}>
         <PlayRow base={base} marks={marks} onTap={onTap} />
         {taFlash && (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(247,244,234,0.82)" }}>
@@ -617,7 +617,7 @@ function PlayTwoChoice({ tcq, tcMode, timeLeft, taFlash, diff, session, onAnswer
       </div>
 
       <div style={{ background: PAPER_DK, border: `1px solid ${GRID}`, padding: "28px 16px", position: "relative", minHeight: 96, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ fontFamily: MINCHO, fontSize: 28, lineHeight: 1.7, textAlign: "center" }}>
+        <div style={{ fontFamily: MINCHO, fontSize: "clamp(19px, 5vw, 28px)", lineHeight: 1.8, textAlign: "center" }}>
           {tcq.chars.map((c, i) => (
             <span key={i} style={i === tcq.focus ? { color: SHU, background: "#fbe3ea", borderBottom: `2px solid ${SHU}`, padding: "0 2px", fontWeight: 700 } : undefined}>{c}</span>
           ))}
@@ -634,8 +634,8 @@ function PlayTwoChoice({ tcq, tcMode, timeLeft, taFlash, diff, session, onAnswer
       </div>
 
       <div style={{ display: "flex", gap: 12 }}>
-        <button onClick={() => onAnswer(true)} style={{ flex: 1, padding: 18, fontSize: 20, fontFamily: MINCHO, letterSpacing: 4, color: "#fff", background: GRID, border: "none", cursor: "pointer" }}>要る</button>
-        <button onClick={() => onAnswer(false)} style={{ flex: 1, padding: 18, fontSize: 20, fontFamily: MINCHO, letterSpacing: 4, color: "#fff", background: SHU, border: "none", cursor: "pointer" }}>要らない</button>
+        <button onClick={() => onAnswer(true)} style={{ flex: 1, padding: "18px 8px", fontSize: "clamp(17px, 4.5vw, 20px)", fontFamily: MINCHO, letterSpacing: 3, color: "#fff", background: GRID, border: "none", cursor: "pointer" }}>要る</button>
+        <button onClick={() => onAnswer(false)} style={{ flex: 1, padding: "18px 8px", fontSize: "clamp(17px, 4.5vw, 20px)", fontFamily: MINCHO, letterSpacing: 3, color: "#fff", background: SHU, border: "none", cursor: "pointer" }}>要らない</button>
       </div>
     </div>
   );
@@ -717,7 +717,7 @@ function Result({ problem, base, marks, result, session, onNext, onEnd }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ textAlign: "center", position: "relative" }}>
         <div className="pop" style={{ fontSize: 28, letterSpacing: 4, color: SHU, fontFamily: MINCHO }}>{"★★★".slice(0, stars) + "☆☆☆".slice(0, 3 - stars)}</div>
-        <div style={{ fontFamily: MINCHO, fontSize: 44, fontWeight: 700, marginTop: 4 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
+        <div style={{ fontFamily: MINCHO, fontSize: "clamp(34px, 9vw, 44px)", fontWeight: 700, marginTop: 4 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
         <div className="float-up" style={{ fontSize: 12, color: "#9a9a9a", marginTop: 2 }}>
           基礎 {baseScore} × 難易度 {diffMult}{comboMult > 1 ? ` × コンボ ${comboMult.toFixed(1)}` : ""}
         </div>
@@ -732,7 +732,7 @@ function Result({ problem, base, marks, result, session, onNext, onEnd }) {
         )}
       </div>
 
-      <div style={{ background: PAPER_DK, border: `1px solid ${GRID}`, padding: "16px 16px 12px" }}>
+      <div style={{ background: PAPER_DK, border: `1px solid ${GRID}`, padding: "16px 8px 12px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 12, fontFamily: GOTHIC, marginBottom: 4 }}>
           <span style={{ color: SHU }}>答え合わせ</span>
           <span style={{ color: "#9a9a9a" }}><span style={{ color: SHU }}>○＝正解</span> ／ <span style={{ color: SHU }}>✗＝誤り</span> ／ <span style={{ color: GRID }}>ここ＝打ち忘れ</span></span>
@@ -740,14 +740,14 @@ function Result({ problem, base, marks, result, session, onNext, onEnd }) {
         <ResultRow base={base} marks={marks} detail={detail} answerMap={answerMap} />
       </div>
 
-      <div style={{ textAlign: "center", fontFamily: MINCHO, fontSize: 24, lineHeight: 1.7 }}>
+      <div style={{ textAlign: "center", fontFamily: MINCHO, fontSize: "clamp(18px, 4.5vw, 24px)", lineHeight: 1.8 }}>
         <span style={{ fontSize: 11, color: "#9a9a9a", fontFamily: GOTHIC, display: "block", marginBottom: 4 }}>正解</span>
         {answerString(problem)}
       </div>
 
       <ExplainBox text={problem.text} userText={buildUserText(base, marks)} presetWhy={problem.why} wrong={!result.isPerfect} />
 
-      <div style={{ display: "flex", justifyContent: "space-around", textAlign: "center", fontFamily: GOTHIC, fontSize: 13 }}>
+      <div style={{ display: "flex", justifyContent: "space-around", textAlign: "center", fontFamily: GOTHIC, fontSize: 13, flexWrap: "wrap", gap: 8 }}>
         <div><div style={{ fontSize: 22, fontFamily: MINCHO, color: GRID }}>{correct}/{total}</div><div style={{ color: "#6b6b6b" }}>正解</div></div>
         <div><div style={{ fontSize: 22, fontFamily: MINCHO, color: SHU }}>{wrong}</div><div style={{ color: "#6b6b6b" }}>まちがい</div></div>
         <div><div style={{ fontSize: 22, fontFamily: MINCHO, color: SHU }}>{missed}</div><div style={{ color: "#6b6b6b" }}>打ち忘れ</div></div>
@@ -782,7 +782,7 @@ function Summary({ session, diff, gameMode, taSecs, taResult, onAgain, onHome })
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 20, padding: "24px 0" }}>
         <div style={{ fontFamily: MINCHO, fontSize: 15, letterSpacing: 6, color: GRID }}>けっか</div>
         <div>
-          <div style={{ fontFamily: MINCHO, fontSize: 48, fontWeight: 700 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
+          <div style={{ fontFamily: MINCHO, fontSize: "clamp(36px, 10vw, 48px)", fontWeight: 700 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
           <div style={{ fontSize: 13, color: "#6b6b6b", marginTop: 4 }}>{DIFF_LABEL[diff]}</div>
         </div>
         <div style={{ display: "flex", gap: 32, fontFamily: GOTHIC }}>
@@ -798,7 +798,7 @@ function Summary({ session, diff, gameMode, taSecs, taResult, onAgain, onHome })
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, padding: "16px 0" }}>
       <div style={{ textAlign: "center" }}>
         <div style={{ fontFamily: MINCHO, fontSize: 15, letterSpacing: 6, color: GRID }}>{isTC ? (tcSurvival ? "二択・サバイバル 結果" : "二択・タイム 結果") : "タイムアタック結果"}</div>
-        <div style={{ fontFamily: MINCHO, fontSize: 48, fontWeight: 700, marginTop: 6 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
+        <div style={{ fontFamily: MINCHO, fontSize: "clamp(36px, 10vw, 48px)", fontWeight: 700, marginTop: 6 }}>{shown.toLocaleString()}<span style={{ fontSize: 16, color: "#6b6b6b" }}> 点</span></div>
         <div style={{ fontSize: 13, color: "#6b6b6b", marginTop: 2 }}>{isTC ? (tcSurvival ? "二択・サバイバル" : `二択・タイム ${taSecs}秒`) : `${DIFF_LABEL[diff]} ・ ${taSecs}秒`}</div>
         {taResult.rank > 0 && (
           <div className="combo-badge" style={{ marginTop: 8, display: "inline-block", fontFamily: MINCHO, fontSize: 15, color: SHU }}>
@@ -807,7 +807,7 @@ function Summary({ session, diff, gameMode, taSecs, taResult, onAgain, onHome })
         )}
       </div>
 
-      <div style={{ display: "flex", gap: 28, fontFamily: GOTHIC }}>
+      <div style={{ display: "flex", gap: 20, fontFamily: GOTHIC, flexWrap: "wrap", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}><div style={{ fontSize: 24, fontFamily: MINCHO, color: GRID }}>{taResult.played}</div><div style={{ fontSize: 12, color: "#6b6b6b" }}>解いた問題</div></div>
         <div style={{ textAlign: "center" }}><div style={{ fontSize: 24, fontFamily: MINCHO, color: GRID }}>{taResult.marks}</div><div style={{ fontSize: 12, color: "#6b6b6b" }}>{tcSurvival ? "連続正解" : isTC ? "正解数" : "正解した句読点"}</div></div>
         <div style={{ textAlign: "center" }}><div style={{ fontSize: 24, fontFamily: MINCHO, color: SHU }}>{taResult.maxCombo}</div><div style={{ fontSize: 12, color: "#6b6b6b" }}>最大コンボ</div></div>

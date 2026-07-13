@@ -4,6 +4,34 @@
   padding: 0;
 }
 
+/* 原稿用紙のマスの大きさ。画面幅に応じて自動で縮む（スマホ対応） */
+:root {
+  --masu: 40px;   /* 文字マス */
+  --gap: 20px;    /* 句読点を入れるスキマ */
+  --masu-font: 24px;
+}
+@media (max-width: 640px) {
+  :root {
+    --masu: 32px;
+    --gap: 16px;
+    --masu-font: 19px;
+  }
+}
+@media (max-width: 420px) {
+  :root {
+    --masu: 27px;
+    --gap: 13px;
+    --masu-font: 16px;
+  }
+}
+@media (max-width: 340px) {
+  :root {
+    --masu: 23px;
+    --gap: 11px;
+    --masu-font: 14px;
+  }
+}
+
 html,
 body {
   min-height: 100%;
