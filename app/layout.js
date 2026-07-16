@@ -23,6 +23,9 @@ export const metadata = {
     description: DESC,
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "I6ffD0lbvZUruWik4PIhOER00Txd0QxRKAH4FpPcUDM",
+  },
 };
 
 export const viewport = {
